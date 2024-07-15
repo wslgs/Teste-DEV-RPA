@@ -64,7 +64,7 @@ def save_error_report():
     """
     if error_reports:
         timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-        report_filename = os.path.join(reports_directory, f'report_{timestamp}.txt')
+        report_filename = os.path.join(reports_directory, f'report_{timestamp}.report')
         with open(report_filename, 'w') as file:
             for error in error_reports:
                 file.write(error + '\n')

@@ -164,8 +164,7 @@ A estrutura do projeto é organizada da seguinte forma:
 ```
 robo_desktop/
 ├── alarm.py                # Script principal de automação desktop
-├── requirements.txt        # Arquivo de dependências do projeto
-└── README.md               # Arquivo README do projeto
+└── requirements.txt        # Arquivo de dependências do projeto
 ```
 
 ### Instalação

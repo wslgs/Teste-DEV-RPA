@@ -10,6 +10,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException, TimeoutException, ElementClickInterceptedException
 from dotenv import load_dotenv # type: ignore
+from datetime import datetime
 
 # Carregar variáveis de ambiente do arquivo .env
 load_dotenv()
@@ -32,6 +33,11 @@ log_directory = 'logs'
 if not os.path.exists(log_directory):
     os.makedirs(log_directory)
 
+# Caminho para o diretório de reports
+reports_directory = 'reports'
+if not os.path.exists(reports_directory):
+    os.makedirs(reports_directory)
+
 # Configuração do logging
 logger = logging.getLogger('MeuSistemaLogger')
 logger.setLevel(logging.INFO)
@@ -48,6 +54,29 @@ console_handler.setFormatter(formatter)
 # Adicionar handlers ao logger
 logger.addHandler(file_handler)
 logger.addHandler(console_handler)
+
+# Variável global para armazenar erros
+error_reports = []
+
+def save_error_report():
+    """
+    Salva as mensagens de erro acumuladas em um arquivo de relatório na pasta reports.
+    """
+    if error_reports:
+        timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+        report_filename = os.path.join(reports_directory, f'report_{timestamp}.txt')
+        with open(report_filename, 'w') as file:
+            for error in error_reports:
+                file.write(error + '\n')
+
+def add_error_report(error_message):
+    """
+    Adiciona uma mensagem de erro à lista de erros.
+
+    Args:
+        error_message (str): Mensagem de erro a ser adicionada.
+    """
+    error_reports.append(error_message)
 
 def login_demoqa(driver, username, password):
     """
@@ -79,7 +108,9 @@ def login_demoqa(driver, username, password):
         WebDriverWait(driver, 10).until(EC.url_contains('profile'))
         logger.info('Login realizado com sucesso')
     except Exception as e:
-        logger.error(f'Erro durante o login: {e}')
+        error_message = f'Erro durante o login: {e}'
+        logger.error(error_message)
+        add_error_report(error_message)
 
 def interact_with_elements(driver):
     """
@@ -94,7 +125,9 @@ def interact_with_elements(driver):
         # Adicione interações específicas aqui
         logger.info('Interação com Elements concluída com sucesso')
     except Exception as e:
-        logger.error(f'Erro durante a interação com Elements: {e}')
+        error_message = f'Erro durante a interação com Elements: {e}'
+        logger.error(error_message)
+        add_error_report(error_message)
 
 def interact_with_forms(driver):
     """
@@ -109,7 +142,9 @@ def interact_with_forms(driver):
         # Adicione interações específicas aqui
         logger.info('Interação com Forms concluída com sucesso')
     except Exception as e:
-        logger.error(f'Erro durante a interação com Forms: {e}')
+        error_message = f'Erro durante a interação com Forms: {e}'
+        logger.error(error_message)
+        add_error_report(error_message)
 
 def interact_with_alerts_frames_windows(driver):
     """
@@ -124,7 +159,9 @@ def interact_with_alerts_frames_windows(driver):
         # Adicione interações específicas aqui
         logger.info('Interação com Alerts, Frame & Windows concluída com sucesso')
     except Exception as e:
-        logger.error(f'Erro durante a interação com Alerts, Frame & Windows: {e}')
+        error_message = f'Erro durante a interação com Alerts, Frame & Windows: {e}'
+        logger.error(error_message)
+        add_error_report(error_message)
 
 def interact_with_widgets(driver):
     """
@@ -139,7 +176,9 @@ def interact_with_widgets(driver):
         # Adicione interações específicas aqui
         logger.info('Interação com Widgets concluída com sucesso')
     except Exception as e:
-        logger.error(f'Erro durante a interação com Widgets: {e}')
+        error_message = f'Erro durante a interação com Widgets: {e}'
+        logger.error(error_message)
+        add_error_report(error_message)
 
 def interact_with_interactions(driver):
     """
@@ -154,7 +193,9 @@ def interact_with_interactions(driver):
         # Adicione interações específicas aqui
         logger.info('Interação com Interactions concluída com sucesso')
     except Exception as e:
-        logger.error(f'Erro durante a interação com Interactions: {e}')
+        error_message = f'Erro durante a interação com Interactions: {e}'
+        logger.error(error_message)
+        add_error_report(error_message)
 
 def collect_book_data(driver):
     """
@@ -196,9 +237,9 @@ def collect_book_data(driver):
                             "publisher": publisher
                         })
                 except (NoSuchElementException, TimeoutException) as e:
-                    logger.error(f'Erro ao coletar dados de um livro: {e}\n'
-                                 f'HTML do elemento: {book.get_attribute("outerHTML")}\n'
-                                 f'Stacktrace: {e.stacktrace}')
+                    error_message = f'Erro ao coletar dados de um livro: {e}\nHTML do elemento: {book.get_attribute("outerHTML")}\nStacktrace: {e.stacktrace}'
+                    logger.error(error_message)
+                    add_error_report(error_message)
                     continue
             
             try:
@@ -219,7 +260,9 @@ def collect_book_data(driver):
 
         logger.info('Dados dos livros coletados com sucesso')
     except Exception as e:
-        logger.error(f'Erro na coleta de dados dos livros: {e}')
+        error_message = f'Erro na coleta de dados dos livros: {e}'
+        logger.error(error_message)
+        add_error_report(error_message)
     return book_data
 
 def save_to_database(book_data):
@@ -262,7 +305,9 @@ def save_to_database(book_data):
         conn.close()
         logger.info('Dados salvos no banco de dados com sucesso')
     except Exception as e:
-        logger.error(f'Erro ao salvar dados no banco de dados: {e}')
+        error_message = f'Erro ao salvar dados no banco de dados: {e}'
+        logger.error(error_message)
+        add_error_report(error_message)
 
 def export_to_csv(book_data):
     """
@@ -276,7 +321,9 @@ def export_to_csv(book_data):
         df.to_csv('data/books.csv', index=False)
         logger.info('Dados exportados para CSV com sucesso')
     except Exception as e:
-        logger.error(f'Erro ao exportar dados para CSV: {e}')
+        error_message = f'Erro ao exportar dados para CSV: {e}'
+        logger.error(error_message)
+        add_error_report(error_message)
 
 if __name__ == '__main__':
     driver = None
@@ -313,8 +360,11 @@ if __name__ == '__main__':
 
         logger.info(f'Dados coletados: {book_data}')
     except Exception as e:
-        logger.error(f'Erro na execução principal: {e}')
+        error_message = f'Erro na execução principal: {e}'
+        logger.error(error_message)
+        add_error_report(error_message)
     finally:
         if driver:
             driver.quit()
             logger.info('WebDriver fechado')
+        save_error_report()

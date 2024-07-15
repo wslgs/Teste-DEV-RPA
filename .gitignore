@@ -1,0 +1,13 @@
+# Ignore arquivos e diretórios específicos
+robo_web/data/*
+robo_web/logs/*
+robo_web/reports/*
+
+# Não ignore este arquivo específico
+!.gitignore
+
+# Ignorar outros arquivos comuns
+*.pyc
+__pycache__/
+*.log
+*.env

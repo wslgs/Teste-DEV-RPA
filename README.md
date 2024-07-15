@@ -49,8 +49,10 @@ robo_web/
 #### Pré-requisitos
 
 - Python 3.x instalado
+- Pip
 - Google Chrome instalado
 - ChromeDriver compatível com a versão do Google Chrome
+- SQL Server 2022
 
 #### Passos para Instalação
 

@@ -17,21 +17,17 @@ if not os.path.exists(reports_directory):
     os.makedirs(reports_directory)
 
 # Configurar logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+log_file_path = os.path.join(log_directory, 'alarms_log.log')
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler(log_file_path),
+        logging.StreamHandler()
+    ]
+)
 logger = logging.getLogger()
-
-# Verificar se os handlers já estão configurados para evitar duplicação
-if not logger.hasHandlers():
-    # Adicionar handlers para o logger
-    file_handler = logging.FileHandler(os.path.join(log_directory, 'alarms_log.log'))
-    console_handler = logging.StreamHandler()
-
-    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-    file_handler.setFormatter(formatter)
-    console_handler.setFormatter(formatter)
-
-    logger.addHandler(file_handler)
-    logger.addHandler(console_handler)
 
 # Variável global para armazenar erros
 error_reports = []
@@ -266,12 +262,6 @@ criar_alarme(hora=8, minuto=0, nome="Tenha um excelente dia de trabalho!", dias=
 
 # Criar o segundo alarme
 criar_alarme(hora=7, minuto=45, nome="Curtir o final de semana", dias=[1, 7], soneca="30 minutos", repetir=True, campainha="Jingle")
-
-# Criar o terceiro alarme (exemplo de alarme não repetitivo)
-criar_alarme(hora=16, minuto=35, nome="Teste 1", dias=[0], soneca="30 minutos", repetir=False, campainha="Jingle")
-
-# Criar o terceiro alarme (exemplo de alarme não repetitivo)
-criar_alarme(hora=16, minuto=36, nome="Teste 2", dias=[0], soneca="30 minutos", repetir=False, campainha="Jingle")
 
 # Fecha o relógio
 close_clock()

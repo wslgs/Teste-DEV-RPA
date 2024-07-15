@@ -26,7 +26,7 @@ if not logger.hasHandlers():
     file_handler = logging.FileHandler(os.path.join(log_directory, 'alarms_log.log'))
     console_handler = logging.StreamHandler()
 
-    formatter = logging.Formatter('%(asctime)s - %(levellevel)s - %(message)s')
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
     file_handler.setFormatter(formatter)
     console_handler.setFormatter(formatter)
 
@@ -40,12 +40,15 @@ def save_error_report():
     """
     Salva as mensagens de erro acumuladas em um arquivo de relatório na pasta reports.
     """
-    if error_reports:
-        timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-        report_filename = os.path.join(reports_directory, f'report_{timestamp}.report')
-        with open(report_filename, 'w') as file:
+    timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+    report_filename = os.path.join(reports_directory, f'report_{timestamp}.report')
+    
+    with open(report_filename, 'w') as file:
+        if error_reports:
             for error in error_reports:
                 file.write(error + '\n')
+        else:
+            file.write("Nenhum erro encontrado durante a execução.\n")
 
 def add_error_report(error_message):
     """

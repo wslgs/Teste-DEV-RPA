@@ -1,6 +1,6 @@
 # Projeto de Testes para AeC
 
-Este repositório contém dois projetos de robôs de automação desenvolvidos em Python: um robô web para coletar dados de livros no site DemoQA e um robô desktop para configurar alarmes no aplicativo Relógio do Windows.
+Este repositório contém dois projetos de robôs de automação desenvolvidos em Python: um robô web para realizar interações e coletar dados no site DemoQA e um robô desktop para configurar alarmes no aplicativo Relógio do Windows.
 
 ---
 
@@ -163,6 +163,12 @@ A estrutura do projeto é organizada da seguinte forma:
 
 ```
 robo_desktop/
+├── logs/
+│   └── rpa_log.log         # Arquivo de log gerado pelo robô
+│
+├── reports/
+│   └── (vazio)             # Diretório reservado para relatórios futuros
+|
 ├── alarm.py                # Script principal de automação desktop
 └── requirements.txt        # Arquivo de dependências do projeto
 ```

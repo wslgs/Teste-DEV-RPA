@@ -138,24 +138,15 @@ pip install -r requirements.txt
 
 ### Descrição
 
-Este projeto é um robô de automação desktop desenvolvido para configurar alarmes no aplicativo Relógio do Windows. O robô automatiza a abertura do aplicativo, a criação de alarmes específicos e a configuração de várias opções, como hora, repetição e soneca.
+Este projeto é um robô de automação desktop desenvolvido para configurar alarmes no aplicativo Relógio do Windows. O robô automatiza a abertura do aplicativo, a criação de alarmes específicos e a configuração de várias opções, como hora, repetição e soneca. Além disso, o robô registra os alarmes criados e agenda tarefas no Windows para registrar a execução dos alarmes.
 
 ### Funcionalidades
 
 - Abre o aplicativo Relógio do Windows.
 - Acessa a aba "Alarme".
-- Adiciona novos alarmes com as seguintes configurações:
-  - **Primeiro Alarme:**
-    - Hora: 08:00
-    - Nome do Alarme: "Tenha um excelente dia de trabalho!"
-    - Repetição: Segunda a Sexta-feira
-    - Soneca: 5 minutos
-  - **Segundo Alarme:**
-    - Hora: 07:45
-    - Nome do Alarme: "Curtir o final de semana"
-    - Repetição: Sábado e Domingo
-    - Soneca: 30 minutos
-    - Campainha: Jingle
+- Adiciona novos alarmes com configurações específicas.
+- Registra os alarmes criados em um arquivo histórico.
+- Agenda tarefas no Windows para registrar a execução dos alarmes.
 
 ### Estrutura do Projeto
 
@@ -164,13 +155,14 @@ A estrutura do projeto é organizada da seguinte forma:
 ```
 robo_desktop/
 ├── logs/
-│   └── rpa_log.log         # Arquivo de log gerado pelo robô
+│   └── alarms_log.log         # Arquivo de log gerado pelo robô
 │
 ├── reports/
-│   └── (vazio)             # Diretório reservado para relatórios futuros
-|
-├── alarm.py                # Script principal de automação desktop
-└── requirements.txt        # Arquivo de dependências do projeto
+│   └── (vazio)                # Diretório reservado para relatórios futuros
+│
+├── alarm.py                   # Script principal de automação desktop
+├── register_alarm.py          # Script para registrar a execução do alarme
+└── requirements.txt           # Arquivo de dependências do projeto
 ```
 
 ### Instalação
@@ -214,81 +206,34 @@ robo_desktop/
 
 O script `alarm.py` realiza as seguintes etapas principais:
 
-1. Abre o aplicativo Relógio do Windows.
-2. Conecta-se à janela do Relógio.
-3. Navega até a aba "Alarme".
-4. Adiciona um novo alarme clicando no botão "+".
-5. Configura a hora, minutos, nome do alarme, repetição, som do alarme e soneca.
-6. Salva o alarme configurado.
+1. **Configuração de Logs e Diretórios:**
+   - Configura diretórios para logs e relatórios.
+   - Cria handlers para registrar logs em arquivo e no console.
 
-### Trechos de Código Importantes
+2. **Criação do Diretório e Arquivo Histórico:**
+   - Verifica se o diretório `histórico_robô` e o arquivo `historico.txt` existem. Se não existirem, cria-os.
+   - O arquivo `historico.txt` armazena a data e hora de execução dos alarmes.
 
-- **Abertura do aplicativo de Relógio do Windows:**
+3. **Abertura do Aplicativo Relógio do Windows:**
+   - Utiliza o comando `subprocess.Popen` para abrir o aplicativo Relógio.
 
-  ```python
-  subprocess.Popen(['start', 'ms-clock:'], shell=True)
-  ```
+4. **Conexão à Janela do Relógio:**
+   - Utiliza a biblioteca `pywinauto` para conectar-se à janela do Relógio e garantir que a aba "Alarme" está acessível.
 
-- **Conexão à janela do Relógio:**
+5. **Adição de Novos Alarmes:**
+   - Configura a hora, minutos, nome do alarme, repetição, som do alarme e soneca.
+   - Navega pelas opções do alarme usando comandos de teclado (`send_keys`).
 
-  ```python
-  app = Application(backend="uia").connect(title_re="Relógio")
-  clock = app.window(title_re="Relógio")
-  ```
+6. **Criação de Tarefas Agendadas:**
+   - Utiliza o comando `schtasks` para criar tarefas agendadas no Windows, que executam o script `register_alarm.py` nos horários dos alarmes configurados.
+   - Para alarmes repetitivos, a tarefa é agendada semanalmente para os dias selecionados.
+   - Para alarmes não repetitivos, a tarefa é agendada uma única vez.
 
-- **Configuração da hora e minutos do alarme:**
+7. **Registro de Alarmes Criados:**
+   - Registra a data e hora dos alarmes criados no arquivo `historico.txt`.
 
-  ```python
-  for digit in f"{hora:02d}":
-      send_keys(f"{{VK_NUMPAD{digit}}}")
-  send_keys("{TAB}")
-  for digit in f"{minuto:02d}":
-      send_keys(f"{{VK_NUMPAD{digit}}}")
-  send_keys("{TAB}")
-  ```
-
-- **Configuração do nome do alarme:**
-
-  ```python
-  send_keys(f"{nome.replace(' ', '{SPACE}')}")
-  ```
-
-- **Navegação e configuração dos dias da semana:**
-
-  ```python
-  for dia in range(1, 8):
-      if dia in dias:
-          send_keys("{SPACE}")
-      send_keys("{RIGHT}")
-  ```
-
-- **Configuração do som do alarme:**
-
-  ```python
-  if campainha:
-      send_keys("{TAB}")
-      index = alarm_sounds.index(campainha)
-      for _ in range(index):
-          send_keys("{DOWN}")
-      send_keys("{TAB}")
-  else:
-      send_keys("{TAB}")
-  ```
-
-- **Configuração da soneca:**
-
-  ```python
-  current_index = snooze_times.index("10 minutos")
-  desired_index = snooze_times.index(soneca)
-  steps = desired_index - current_index
-  if steps > 0:
-      for _ in range(steps):
-          send_keys("{DOWN}")
-  elif steps < 0:
-      for _ in range(-steps):
-          send_keys("{UP}")
-  send_keys("{TAB}")
-  ```
+8. **Fechamento do Aplicativo Relógio do Windows:**
+   - Fecha o aplicativo Relógio após a configuração dos alarmes.
 
 ### Versão do Windows
 

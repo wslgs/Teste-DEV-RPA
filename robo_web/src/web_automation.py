@@ -182,53 +182,79 @@ def interact_with_forms(driver):
         first_name_field = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.ID, 'firstName'))
         )
+        driver.execute_script("arguments[0].scrollIntoView(true);", first_name_field)
         first_name_field.send_keys('John')
         time.sleep(2)
         
         last_name_field = driver.find_element(By.ID, 'lastName')
+        driver.execute_script("arguments[0].scrollIntoView(true);", last_name_field)
         last_name_field.send_keys('Doe')
         time.sleep(2)
 
         email_field = driver.find_element(By.ID, 'userEmail')
+        driver.execute_script("arguments[0].scrollIntoView(true);", email_field)
         email_field.send_keys('john.doe@example.com')
         time.sleep(2)
 
         gender_radio_button = driver.find_element(By.XPATH, '//label[text()="Male"]')
+        driver.execute_script("arguments[0].scrollIntoView(true);", gender_radio_button)
         gender_radio_button.click()
         time.sleep(2)
 
         mobile_field = driver.find_element(By.ID, 'userNumber')
+        driver.execute_script("arguments[0].scrollIntoView(true);", mobile_field)
         mobile_field.send_keys('1234567890')
         time.sleep(2)
-        
-        # Usar JavaScript para definir a data de nascimento, pois o campo é somente leitura
+
+        # Interagir com o seletor de data de nascimento
         date_of_birth_field = driver.find_element(By.ID, 'dateOfBirthInput')
-        driver.execute_script("arguments[0].removeAttribute('readonly')", date_of_birth_field)
-        date_of_birth_field.clear()
-        date_of_birth_field.send_keys('15 Jul 2024')
-        date_of_birth_field.send_keys(Keys.RETURN)
+        driver.execute_script("arguments[0].scrollIntoView(true);", date_of_birth_field)
+        date_of_birth_field.click()
+        time.sleep(2)
+
+        # Selecionar mês e ano
+        month_select = driver.find_element(By.CLASS_NAME, 'react-datepicker__month-select')
+        month_select.click()
+        month_option = driver.find_element(By.XPATH, '//option[@value="2"]')  # Março é o mês 2 (0 indexado)
+        month_option.click()
+        time.sleep(2)
+
+        year_select = driver.find_element(By.CLASS_NAME, 'react-datepicker__year-select')
+        year_select.click()
+        year_option = driver.find_element(By.XPATH, '//option[@value="1998"]')
+        year_option.click()
+        time.sleep(2)
+
+        # Selecionar dia
+        day_select = driver.find_element(By.XPATH, '//div[contains(@class, "react-datepicker__day--022") and not(contains(@class, "react-datepicker__day--outside-month"))]')
+        day_select.click()
         time.sleep(2)
         
         subjects_field = driver.find_element(By.ID, 'subjectsInput')
+        driver.execute_script("arguments[0].scrollIntoView(true);", subjects_field)
         subjects_field.send_keys('Math')
         subjects_field.send_keys(Keys.RETURN)
         time.sleep(2)
 
         hobbies_checkbox = driver.find_element(By.XPATH, '//label[text()="Sports"]')
+        driver.execute_script("arguments[0].scrollIntoView(true);", hobbies_checkbox)
         hobbies_checkbox.click()
         time.sleep(2)
         
         current_address_field = driver.find_element(By.ID, 'currentAddress')
+        driver.execute_script("arguments[0].scrollIntoView(true);", current_address_field)
         current_address_field.send_keys('123 Current St, Current City')
         time.sleep(2)
         
         # Selecionar estado e cidade usando a caixa de seleção autocompletar
         state_dropdown = driver.find_element(By.ID, 'react-select-3-input')
+        driver.execute_script("arguments[0].scrollIntoView(true);", state_dropdown)
         state_dropdown.send_keys('NCR')
         state_dropdown.send_keys(Keys.RETURN)
         time.sleep(2)
         
         city_dropdown = driver.find_element(By.ID, 'react-select-4-input')
+        driver.execute_script("arguments[0].scrollIntoView(true);", city_dropdown)
         city_dropdown.send_keys('Delhi')
         city_dropdown.send_keys(Keys.RETURN)
         time.sleep(2)
@@ -304,12 +330,48 @@ def interact_with_widgets(driver):
     try:
         logger.info('Interagindo com a seção Widgets')
         driver.get('https://demoqa.com/widgets')
-        # Adicione interações específicas aqui
+        time.sleep(2)
+
+        # Clicar no item "Accordian" no menu à esquerda
+        accordian_menu_item = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, '//span[text()="Accordian"]'))
+        )
+        accordian_menu_item.click()
+        time.sleep(2)
+        
+        # Fechar "What is Lorem Ipsum?" que já está aberto
+        lorem_ipsum_section = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.ID, 'section1Heading'))
+        )
+        lorem_ipsum_section.click()  # Fechar
+        logger.info('Fechou "What is Lorem Ipsum?"')
+        time.sleep(2)
+
+        # Expandir e fechar "Where does it come from?"
+        where_from_section = driver.find_element(By.ID, 'section2Heading')
+        where_from_section.click()
+        logger.info('Expandiu "Where does it come from?"')
+        time.sleep(2)
+        where_from_section.click()
+        logger.info('Fechou "Where does it come from?"')
+        time.sleep(2)
+
+        # Expandir e fechar "Why do we use it?"
+        why_use_section = driver.find_element(By.ID, 'section3Heading')
+        why_use_section.click()
+        logger.info('Expandiu "Why do we use it?"')
+        time.sleep(2)
+        why_use_section.click()
+        logger.info('Fechou "Why do we use it?"')
+        time.sleep(2)
+
         logger.info('Interação com Widgets concluída com sucesso')
     except Exception as e:
         error_message = f'Erro durante a interação com Widgets: {e}'
         logger.error(error_message)
         add_error_report(error_message)
+
+from selenium.webdriver import ActionChains
 
 def interact_with_interactions(driver):
     """
@@ -321,7 +383,36 @@ def interact_with_interactions(driver):
     try:
         logger.info('Interagindo com a seção Interactions')
         driver.get('https://demoqa.com/interaction')
-        # Adicione interações específicas aqui
+        time.sleep(2)
+
+        # Clicar no item "Sortable" no menu à esquerda
+        sortable_menu_item = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, '//span[text()="Sortable"]'))
+        )
+        sortable_menu_item.click()
+        time.sleep(2)
+        
+        # Selecionar a aba "List"
+        list_tab = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.ID, 'demo-tab-list'))
+        )
+        list_tab.click()
+        time.sleep(2)
+
+        # Pegar os elementos da lista
+        items = driver.find_elements(By.XPATH, '//div[@id="demo-tabpane-list"]//div[@class="list-group-item list-group-item-action"]')
+        
+        # Criar uma instância de ActionChains
+        actions = ActionChains(driver)
+
+        # Realizar a ação de arrastar e soltar
+        actions.click_and_hold(items[0]).move_to_element(items[2]).release().perform()
+        time.sleep(2)
+        actions.click_and_hold(items[1]).move_to_element(items[4]).release().perform()
+        time.sleep(2)
+        actions.click_and_hold(items[2]).move_to_element(items[5]).release().perform()
+        time.sleep(2)
+
         logger.info('Interação com Interactions concluída com sucesso')
     except Exception as e:
         error_message = f'Erro durante a interação com Interactions: {e}'

@@ -4,6 +4,8 @@ Este repositório contém dois projetos de robôs de automação desenvolvidos e
 
 ---
 
+Aqui está a atualização do README com explicações detalhadas sobre o que cada parte do código faz em sequência:
+
 ## Projeto Robô Web
 
 ### Descrição do Projeto
@@ -111,11 +113,31 @@ Este script é responsável pela criação do banco de dados `DemoQA` e da tabel
 
 Este script é o principal responsável pela automação web. Ele realiza as seguintes tarefas:
 
-1. Faz login no site DemoQA.
-2. Interage com diversas seções do site (Elements, Forms, Alerts, Frames & Windows, Widgets, Interactions).
-3. Coleta dados dos livros na seção "Book Store Application".
-4. Salva os dados coletados no banco de dados SQL Server.
-5. Exporta os dados coletados para um arquivo CSV.
+1. **Inicializa o WebDriver do Chrome:** Configura o ChromeDriver e inicializa uma instância do WebDriver do Chrome.
+
+2. **Realiza o login no site DemoQA:**
+   - Navega até a página de login.
+   - Preenche os campos de login com as credenciais fornecidas no arquivo `.env`.
+   - Clica no botão de login e espera até que a URL contenha 'profile', indicando sucesso no login.
+
+3. **Interage com várias seções do site DemoQA:**
+   - **Elements:** Preenche e envia o formulário na seção "Text Box".
+   - **Forms:** Preenche e envia o formulário na seção "Practice Form", incluindo a seleção de gênero, hobbies, e a escolha de estado e cidade.
+   - **Alerts, Frames & Windows:** Navega até "Browser Windows", abre uma nova aba e depois a fecha.
+   - **Widgets:** Navega até "Accordian", fecha a seção "What is Lorem Ipsum?" que já está aberta, e então expande e fecha as seções "Where does it come from?" e "Why do we use it?".
+   - **Interactions:** Navega até "Sortable", seleciona a aba "List" e rearranja os itens na lista usando a funcionalidade de arrastar e soltar do Selenium.
+
+4. **Coleta dados dos livros na seção "Book Store Application":**
+   - Navega até a página de livros.
+   - Coleta informações sobre cada livro disponível (imagem, título, autor, editora).
+   - Continua coletando dados até que todas as páginas de livros tenham sido processadas.
+
+5. **Salva os dados coletados no banco de dados SQL Server:**
+   - Conecta ao banco de dados utilizando as configurações fornecidas no arquivo `.env`.
+   - Insere os dados dos livros na tabela `Books`.
+
+6. **Exporta os dados coletados para um arquivo CSV:**
+   - Cria um DataFrame com os dados coletados e salva no arquivo `data/books.csv`.
 
 ### Dependências
 
@@ -132,7 +154,10 @@ Para instalar todas as dependências, execute:
 pip install -r requirements.txt
 ```
 
----
+### Logging e Relatórios de Erro
+
+- **Logging:** O script registra informações detalhadas sobre a execução em um arquivo de log localizado em `logs/rpa_log.log`.
+- **Relatórios de Erro:** Em caso de erros, as mensagens de erro são acumuladas e salvas em um arquivo de relatório na pasta `reports`.
 
 ## Projeto Robô Desktop para Configuração de Alarme no Windows
 

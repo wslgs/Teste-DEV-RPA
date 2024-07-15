@@ -2,8 +2,10 @@ import os
 import logging
 import pandas as pd
 import pyodbc
+import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
@@ -125,8 +127,41 @@ def interact_with_elements(driver):
     try:
         logger.info('Interagindo com a seção Elements')
         driver.get('https://demoqa.com/elements')
-        # Adicione interações específicas aqui
-        logger.info('Interação com Elements concluída com sucesso')
+        
+        # Clicar no item "Text Box" no menu à esquerda
+        text_box_menu_item = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, '//span[text()="Text Box"]'))
+        )
+        text_box_menu_item.click()
+        
+        # Preencher os campos do formulário
+        full_name_field = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.ID, 'userName'))
+        )
+        email_field = driver.find_element(By.ID, 'userEmail')
+        current_address_field = driver.find_element(By.ID, 'currentAddress')
+        permanent_address_field = driver.find_element(By.ID, 'permanentAddress')
+        time.sleep(2)
+        
+        full_name_field.send_keys('John Doe')
+        email_field.send_keys('john.doe@example.com')
+        current_address_field.send_keys('123 Current St, Current City')
+        permanent_address_field.send_keys('456 Permanent St, Permanent City')
+        time.sleep(2)
+        
+        # Rolar a página até o botão "Submit"
+        submit_button = driver.find_element(By.ID, 'submit')
+        driver.execute_script("arguments[0].scrollIntoView(true);", submit_button)
+        time.sleep(2)
+        
+        # Esperar até que o botão "Submit" esteja presente e clicável
+        WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, 'submit')))
+        submit_button.click()
+        
+        logger.info('Formulário preenchido e enviado com sucesso')
+        
+        # Aguardar 2 segundos antes de sair da função
+        time.sleep(2)
     except Exception as e:
         error_message = f'Erro durante a interação com Elements: {e}'
         logger.error(error_message)
@@ -141,9 +176,73 @@ def interact_with_forms(driver):
     """
     try:
         logger.info('Interagindo com a seção Forms')
-        driver.get('https://demoqa.com/forms')
-        # Adicione interações específicas aqui
-        logger.info('Interação com Forms concluída com sucesso')
+        driver.get('https://demoqa.com/automation-practice-form')
+        
+        # Preencher os campos do formulário
+        first_name_field = WebDriverWait(driver, 10).until(
+            EC.presence_of_element_located((By.ID, 'firstName'))
+        )
+        first_name_field.send_keys('John')
+        time.sleep(2)
+        
+        last_name_field = driver.find_element(By.ID, 'lastName')
+        last_name_field.send_keys('Doe')
+        time.sleep(2)
+
+        email_field = driver.find_element(By.ID, 'userEmail')
+        email_field.send_keys('john.doe@example.com')
+        time.sleep(2)
+
+        gender_radio_button = driver.find_element(By.XPATH, '//label[text()="Male"]')
+        gender_radio_button.click()
+        time.sleep(2)
+
+        mobile_field = driver.find_element(By.ID, 'userNumber')
+        mobile_field.send_keys('1234567890')
+        time.sleep(2)
+        
+        # Usar JavaScript para definir a data de nascimento, pois o campo é somente leitura
+        date_of_birth_field = driver.find_element(By.ID, 'dateOfBirthInput')
+        driver.execute_script("arguments[0].removeAttribute('readonly')", date_of_birth_field)
+        date_of_birth_field.clear()
+        date_of_birth_field.send_keys('15 Jul 2024')
+        date_of_birth_field.send_keys(Keys.RETURN)
+        time.sleep(2)
+        
+        subjects_field = driver.find_element(By.ID, 'subjectsInput')
+        subjects_field.send_keys('Math')
+        subjects_field.send_keys(Keys.RETURN)
+        time.sleep(2)
+
+        hobbies_checkbox = driver.find_element(By.XPATH, '//label[text()="Sports"]')
+        hobbies_checkbox.click()
+        time.sleep(2)
+        
+        current_address_field = driver.find_element(By.ID, 'currentAddress')
+        current_address_field.send_keys('123 Current St, Current City')
+        time.sleep(2)
+        
+        # Selecionar estado e cidade usando a caixa de seleção autocompletar
+        state_dropdown = driver.find_element(By.ID, 'react-select-3-input')
+        state_dropdown.send_keys('NCR')
+        state_dropdown.send_keys(Keys.RETURN)
+        time.sleep(2)
+        
+        city_dropdown = driver.find_element(By.ID, 'react-select-4-input')
+        city_dropdown.send_keys('Delhi')
+        city_dropdown.send_keys(Keys.RETURN)
+        time.sleep(2)
+        
+        # Rolar a página até o botão "Submit"
+        submit_button = driver.find_element(By.ID, 'submit')
+        driver.execute_script("arguments[0].scrollIntoView(true);", submit_button)
+        
+        # Esperar até que o botão "Submit" esteja presente e clicável
+        WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.ID, 'submit')))
+        submit_button.click()
+        time.sleep(2)
+
+        logger.info('Formulário preenchido e enviado com sucesso')
     except Exception as e:
         error_message = f'Erro durante a interação com Forms: {e}'
         logger.error(error_message)
@@ -159,7 +258,36 @@ def interact_with_alerts_frames_windows(driver):
     try:
         logger.info('Interagindo com a seção Alerts, Frame & Windows')
         driver.get('https://demoqa.com/alertsWindows')
-        # Adicione interações específicas aqui
+        time.sleep(2)
+        
+        # Clicar no item "Browser Windows" no menu à esquerda
+        browser_windows_menu_item = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, '//span[text()="Browser Windows"]'))
+        )
+        browser_windows_menu_item.click()
+        time.sleep(2)
+        
+        # Clicar no botão "New Tab"
+        new_tab_button = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.ID, 'tabButton'))
+        )
+        new_tab_button.click()
+        time.sleep(2)
+        
+        # Alternar para a nova aba
+        driver.switch_to.window(driver.window_handles[1])
+        logger.info('Nova aba aberta')
+        time.sleep(2)
+        
+        # Fechar a nova aba
+        driver.close()
+        logger.info('Nova aba fechada')
+        time.sleep(2)
+        
+        # Alternar de volta para a aba original
+        driver.switch_to.window(driver.window_handles[0])
+        logger.info('Retornado para a aba original')
+        
         logger.info('Interação com Alerts, Frame & Windows concluída com sucesso')
     except Exception as e:
         error_message = f'Erro durante a interação com Alerts, Frame & Windows: {e}'

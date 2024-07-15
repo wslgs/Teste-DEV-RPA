@@ -14,6 +14,14 @@ from selenium.common.exceptions import NoSuchElementException, TimeoutException,
 from dotenv import load_dotenv # type: ignore
 from datetime import datetime
 
+# Diretórios necessários
+directories = ['logs', 'data', 'reports']
+
+# Criação dos diretórios, se não existirem
+for directory in directories:
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
 # Carregar variáveis de ambiente do arquivo .env
 load_dotenv()
 

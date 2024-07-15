@@ -6,15 +6,13 @@ from pywinauto import Application, Desktop
 from pywinauto.keyboard import send_keys
 from datetime import datetime, timedelta
 
-# Configurar diretórios de logs e reports
-log_directory = 'logs'
-reports_directory = 'reports'
+# Diretórios necessários
+directories = ['logs', 'reports']
 
-if not os.path.exists(log_directory):
-    os.makedirs(log_directory)
-
-if not os.path.exists(reports_directory):
-    os.makedirs(reports_directory)
+# Criação dos diretórios, se não existirem
+for directory in directories:
+    if not os.path.exists(directory):
+        os.makedirs(directory)
 
 # Configurar logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')

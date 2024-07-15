@@ -2,4 +2,3 @@ pandas
 selenium
 pyodbc
 python-dotenv
-time

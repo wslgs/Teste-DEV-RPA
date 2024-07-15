@@ -268,10 +268,10 @@ criar_alarme(hora=8, minuto=0, nome="Tenha um excelente dia de trabalho!", dias=
 criar_alarme(hora=7, minuto=45, nome="Curtir o final de semana", dias=[1, 7], soneca="30 minutos", repetir=True, campainha="Jingle")
 
 # Criar o terceiro alarme (exemplo de alarme não repetitivo)
-criar_alarme(hora=14, minuto=57, nome="Teste 1", dias=[0], soneca="30 minutos", repetir=False, campainha="Jingle")
+criar_alarme(hora=16, minuto=35, nome="Teste 1", dias=[0], soneca="30 minutos", repetir=False, campainha="Jingle")
 
 # Criar o terceiro alarme (exemplo de alarme não repetitivo)
-criar_alarme(hora=14, minuto=58, nome="Teste 2", dias=[0], soneca="30 minutos", repetir=False, campainha="Jingle")
+criar_alarme(hora=16, minuto=36, nome="Teste 2", dias=[0], soneca="30 minutos", repetir=False, campainha="Jingle")
 
 # Fecha o relógio
 close_clock()

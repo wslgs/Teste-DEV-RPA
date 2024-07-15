@@ -4,13 +4,18 @@ Este repositório contém dois projetos de robôs de automação desenvolvidos e
 
 ---
 
-Aqui está a atualização do README com explicações detalhadas sobre o que cada parte do código faz em sequência:
+## Apresentação
+
+Olá, meu nome é Weslley Gomes Dantas, tenho 26 anos e sou Desenvolvedor e DevOps. Este projeto foi desenvolvido como parte de um teste prático para a AeC, com o objetivo de avaliar minhas habilidades em desenvolvimento de robôs para automação web e desktop. O teste é composto por duas etapas, conforme descrito abaixo:
+
+1. Criação de um robô web que acessa o site DemoQA, realiza interações específicas e salva dados em um banco de dados SQL.
+2. Criação de um robô desktop que configura alarmes no aplicativo Relógio do Windows.
 
 ## Projeto Robô Web
 
 ### Descrição do Projeto
 
-Este projeto consiste em um robô web desenvolvido em Python que realiza a automação de tarefas no site DemoQA. O robô é responsável por coletar dados de livros da seção "Book Store Application" e salvar esses dados em um banco de dados SQL Server. Além disso, o projeto inclui scripts para a criação do banco de dados e das tabelas necessárias.
+O robô web foi desenvolvido para acessar o site [DemoQA](https://demoqa.com/), realizar interações em diversas seções e coletar dados de livros na seção "Book Store Application". Esses dados são salvos em um banco de dados SQL Server e exportados para um arquivo CSV.
 
 ### Estrutura do Projeto
 
@@ -236,7 +241,9 @@ O script `alarm.py` realiza as seguintes etapas principais:
    - Cria handlers para registrar logs em arquivo e no console.
 
 2. **Criação do Diretório e Arquivo Histórico:**
-   - Verifica se o diretório `histórico_robô` e o arquivo `historico.txt` existem. Se não existirem, cria-os.
+   - Verifica se o diretório `histórico_robô` e o arquivo `historico.txt` existem
+
+. Se não existirem, cria-os.
    - O arquivo `historico.txt` armazena a data e hora de execução dos alarmes.
 
 3. **Abertura do Aplicativo Relógio do Windows:**
@@ -260,6 +267,14 @@ O script `alarm.py` realiza as seguintes etapas principais:
 8. **Fechamento do Aplicativo Relógio do Windows:**
    - Fecha o aplicativo Relógio após a configuração dos alarmes.
 
-### Versão do Windows
+### Vídeos Demonstrativos
 
-Este projeto foi testado no Windows 11 Home 64 bits, versão 22631.
+No repositório, há dois vídeos que apresentam o funcionamento dos dois robôs:
+
+1. **Robô Web:**
+   - Demonstra as interações nas páginas do site DemoQA, mostrando a funcionalidade de coleta de dados dos livros e outras interações realizadas.
+   - O vídeo segue os passos descritos na seção "Utilização" e apresenta o resultado final.
+
+2. **Robô Desktop:**
+   - Demonstra a configuração de dois alarmes de teste no aplicativo Relógio do Windows.
+   - O vídeo segue os passos descritos na seção "Uso" e mostra a funcionalidade de salvar e registrar os alarmes configurados.
